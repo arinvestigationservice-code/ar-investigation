@@ -6,7 +6,7 @@
 const CONFIG = {
   email: "ar.investigation.service@gmail.com",
   phone: "",
-  formEndpoint: "",
+  formEndpoint: "https://formspree.io/f/mjyggave",
   registration: ""
 };
 
