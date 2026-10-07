@@ -1,5 +1,5 @@
 /* ===== EDIT ONLY THIS BLOCK =====
-   phone: digits with country code, e.g. "919876543210" (leave "" to hide Call/WhatsApp buttons)
+   phone: digits with country code, e.g. "919876543210" (leave "" to hide Call buttons)
    formEndpoint: Formspree URL e.g. "https://formspree.io/f/xxxxxxx" (leave "" to use email fallback)
    registration: e.g. "Registered under ..." (leave "" to hide)
 ================================== */
@@ -32,10 +32,6 @@ if (CONFIG.phone) {
   const pretty = "+" + digits;
   $$("[data-call]").forEach(el => {
     el.href = "tel:" + pretty;
-    el.hidden = false;
-  });
-  $$("[data-wa]").forEach(el => {
-    el.href = "https://wa.me/" + digits + "?text=" + encodeURIComponent("Hello, I would like to discuss a verification requirement.");
     el.hidden = false;
   });
 }
