@@ -1,5 +1,5 @@
 /* ===== EDIT ONLY THIS BLOCK =====
-   phone: digits with country code, e.g. "7078894411" (leave "" to hide Call/WhatsApp buttons)
+   phone: digits with country code, e.g. "919876543210" (leave "" to hide Call/WhatsApp buttons)
    formEndpoint: Formspree URL e.g. "https://formspree.io/f/xxxxxxx" (leave "" to use email fallback)
    registration: e.g. "Registered under ..." (leave "" to hide)
 ================================== */
@@ -35,7 +35,7 @@ if (CONFIG.phone) {
     el.hidden = false;
   });
   $$("[data-wa]").forEach(el => {
-    el.href = "https://wa.me/" + digits + "?text=" + encodeURIComponent("Hello, I would like to discuss an investigation requirement.");
+    el.href = "https://wa.me/" + digits + "?text=" + encodeURIComponent("Hello, I would like to discuss a verification requirement.");
     el.hidden = false;
   });
 }
@@ -71,7 +71,7 @@ form.addEventListener("submit", async (e) => {
       const res = await fetch(CONFIG.formEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({ name, phone, email, service, message, _subject: "New Investigation Enquiry - " + service })
+        body: JSON.stringify({ name, phone, email, service, message, _subject: "New Verification Enquiry - " + service })
       });
       if (!res.ok) throw new Error("fail");
       form.reset();
@@ -84,7 +84,7 @@ form.addEventListener("submit", async (e) => {
   }
 
   /* Fallback: open email app */
-  const subject = encodeURIComponent("New Investigation Enquiry - " + service);
+  const subject = encodeURIComponent("New Verification Enquiry - " + service);
   const body = encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nService: ${service}\n\nRequirement:\n${message}`);
   showMsg("Opening your email app. If nothing opens, please email " + CONFIG.email + " directly.", true);
   window.location.href = `mailto:${CONFIG.email}?subject=${subject}&body=${body}`;
