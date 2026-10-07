@@ -1,7 +1,7 @@
 # A R Investigation Website
 
 ## Files
-index.html, style.css, script.js, robots.txt
+index.html, style.css, script.js, robots.txt, sitemap.xml
 
 ## Before publishing - edit the CONFIG block at the top of script.js
 - phone: your number with country code, digits only, e.g. "919876543210".
