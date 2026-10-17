@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -145,6 +145,7 @@
             <label for="vcaptcha">Captcha code</label>
             <div class="captcha-row">
               <canvas id="captchaCanvas" width="190" height="56" role="img" aria-label="Captcha image"></canvas>
+              <div id="captchaText" class="captcha-text" hidden></div>
               <button type="button" class="btn outline" id="captchaNew" aria-label="Show a new captcha">↻ New</button>
             </div>
             <input id="vcaptcha" name="vcaptcha" required autocomplete="off" autocapitalize="characters" maxlength="8" placeholder="Type the code from the picture">
@@ -231,6 +232,6 @@
     <a href="#contact">Enquiry</a>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=3"></script>
 </body>
 </html>

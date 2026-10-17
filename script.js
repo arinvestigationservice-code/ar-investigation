@@ -122,10 +122,7 @@ function rnd(n) {
   crypto.getRandomValues(b);
   return b[0] % n;
 }
-function newCaptcha() {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  captchaText = Array.from({ length: 5 }, () => chars[rnd(chars.length)]).join("");
-  if (!capCanvas || !capCanvas.getContext) return;
+function drawCaptcha() {
   const ctx = capCanvas.getContext("2d"), w = capCanvas.width, h = capCanvas.height;
   ctx.clearRect(0, 0, w, h);
   ctx.fillStyle = "#f3f6fa";
@@ -153,6 +150,24 @@ function newCaptcha() {
     ctx.fillStyle = "#07182f";
     ctx.fillText(captchaText[i], 0, 0);
     ctx.restore();
+  }
+}
+function newCaptcha() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  try {
+    captchaText = Array.from({ length: 5 }, () => chars[rnd(chars.length)]).join("");
+  } catch (e) {   // very old browser without crypto.getRandomValues
+    captchaText = Array.from({ length: 5 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  }
+  const txt = $("#captchaText");
+  try {
+    if (!capCanvas || !capCanvas.getContext) throw new Error("no canvas");
+    drawCaptcha();
+    capCanvas.hidden = false;
+    if (txt) txt.hidden = true;
+  } catch (e) {   // canvas blocked: show the code as styled text instead
+    if (capCanvas) capCanvas.hidden = true;
+    if (txt) { txt.textContent = captchaText; txt.hidden = false; }
   }
 }
 
@@ -218,7 +233,7 @@ function vMsg(text) {
   vOut.replaceChildren(el("div", "vnf", text));
   vOut.hidden = false;
 }
-vForm.addEventListener("submit", (e) => {
+if (vForm) vForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const id = vForm.vid.value.trim(), cap = vForm.vcaptcha.value.trim().toUpperCase();
   if (!id || !cap) return vMsg("Please enter the ID number and the captcha code.");
@@ -231,13 +246,14 @@ vForm.addEventListener("submit", (e) => {
   newCaptcha();   // every check needs a fresh captcha
   verifyStaff(id);
 });
-$("#captchaNew").addEventListener("click", () => { newCaptcha(); vForm.vcaptcha.value = ""; vForm.vcaptcha.focus(); });
-newCaptcha();
+const capNew = $("#captchaNew");
+if (capNew) capNew.addEventListener("click", () => { newCaptcha(); vForm.vcaptcha.value = ""; vForm.vcaptcha.focus(); });
+if (vForm) newCaptcha();
 
 /* QR scan: ?id=... fills the ID number, the visitor then types the captcha */
 (function () {
   const id = (new URLSearchParams(location.search).get("id") || "").trim();
-  if (!id) return;
+  if (!id || !vForm) return;
   vForm.vid.value = id;
   history.replaceState(null, "", location.pathname + "#verify");
   vForm.vcaptcha.focus({ preventScroll: true });
