@@ -220,11 +220,19 @@ async function verifyStaff(id) {
       headers: { "apikey": CONFIG.supabaseKey, "Content-Type": "application/json" },
       body: JSON.stringify({ p_eid: id })
     });
-    if (!res.ok) throw new Error("http " + res.status);
+    if (!res.ok) {
+      let detail = "";
+      try { const j = await res.json(); detail = [j.code, j.message].filter(Boolean).join(": "); } catch (x) {}
+      throw new Error("HTTP " + res.status + (detail ? " - " + detail : ""));
+    }
     const data = await res.json();
     if (data && data.name) showStaff(data); else showNotFound();
   } catch (err) {
-    vOut.replaceChildren(el("div", "vnf", "Could not check right now. Please try again, or email us at " + CONFIG.email + "."));
+    console.error("Verify failed:", err);
+    const box = el("div", "vnf", "Could not check right now. Please try again, or email us at " + CONFIG.email + ".");
+    box.append(document.createElement("br"));
+    box.append(el("small", "", "Technical detail: " + (err && err.message ? err.message : "network error")));
+    vOut.replaceChildren(box);
     vOut.hidden = false;
   }
   vBtn.disabled = false; vBtn.textContent = "Verify";
