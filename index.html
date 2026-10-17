@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>A R Investigation | Field Verification Services</title>
   <meta name="description" content="A R Investigation provides professional field verification services: residence, office, business, employment and document verification.">
-  <link rel="canonical" href="https://arinvestigationservice-code.github.io/ar-investigation/">
-  <meta name="google-site-verification" content="5dOFDzLJOwYOInF9PtsigKIu0tHOrRxPeh0mF06onzM" />
   <meta name="theme-color" content="#07182f">
+  <meta name="referrer" content="no-referrer">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://arinvestigationservice-code.github.io/ar-investigation/">
   <meta property="og:title" content="A R Investigation | Field Verification Services">
   <meta property="og:description" content="Reliable on-ground field verification with clear, structured reports.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307182f'/%3E%3Ctext x='32' y='42' font-size='28' font-family='Arial' font-weight='700' text-anchor='middle' fill='white'%3EAR%3C/text%3E%3C/svg%3E">
@@ -32,6 +30,7 @@
         <a href="#about">About</a>
         <a href="#services">Services</a>
         <a href="#process">Process</a>
+        <a href="#verify">Verify Staff</a>
         <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -47,6 +46,7 @@
           <p>A R Investigation provides on-ground field verification services with accurate findings, clear reporting and confidentiality.</p>
           <div class="hero-actions">
             <a class="btn primary" href="#contact">Request Verification</a>
+            <a class="btn wa" data-wa hidden target="_blank" rel="noopener">WhatsApp Us</a>
             <a class="btn ghost" href="#services">Explore Services</a>
           </div>
           <div class="trust-row">
@@ -131,6 +131,26 @@
       </div>
     </section>
 
+    <section id="verify" class="section verify">
+      <div class="container verify-grid">
+        <div>
+          <div class="eyebrow">VERIFY OUR STAFF</div>
+          <h2>Is this person really <span>from us?</span></h2>
+          <p class="verify-note">Every A R Investigation field executive and coordinator carries an ID card. Scan the QR code on the card, or enter the ID number and verification code printed on it.</p>
+        </div>
+        <div>
+          <form class="form" id="verifyForm" novalidate>
+            <label for="vid">ID number</label>
+            <input id="vid" name="vid" required autocomplete="off" autocapitalize="characters" placeholder="Example: FE-101">
+            <label for="vcode">Verification code</label>
+            <input id="vcode" name="vcode" required autocomplete="off" autocapitalize="characters" maxlength="12" placeholder="Code printed on the ID card">
+            <button class="btn primary" type="submit" id="verifyBtn">Verify</button>
+          </form>
+          <div id="verifyResult" class="vresult" aria-live="polite" hidden></div>
+        </div>
+      </div>
+    </section>
+
     <section id="faq" class="section" style="background:var(--paper)">
       <div class="container">
         <div class="eyebrow">FAQ</div>
@@ -140,8 +160,8 @@
           <details><summary>How long does a report take?</summary><p>Turnaround depends on the type of case, location and scope. We confirm the expected timeline when we accept the case.</p></details>
           <details><summary>What are your charges?</summary><p>Charges depend on the service, location and effort involved. Contact us with your requirement and we will share a quote before starting.</p></details>
           <details><summary>Is my case kept confidential?</summary><p>Yes. Case information and findings are shared only with the client who assigned the case.</p></details>
-          <details><summary>Which areas do you cover?</summary><p>Contact us with the location of your case and we will confirm availability.</p></details>
-                  </div>
+          <details><summary>Which areas do you cover?</summary><p>We are based in Agra, Uttar Pradesh. Contact us with the location of your case and we will confirm availability.</p></details>
+        </div>
       </div>
     </section>
 
@@ -163,6 +183,8 @@
             <div><b>Location</b><span>Agra, Uttar Pradesh, India</span></div>
           </div>
           <div class="contact-actions">
+            <a class="btn primary" data-call hidden>Call Now</a>
+            <a class="btn wa" data-wa hidden target="_blank" rel="noopener">WhatsApp</a>
             <a class="btn outline" href="mailto:ar.investigation.service@gmail.com">Email Us</a>
           </div>
         </div>
@@ -199,6 +221,9 @@
   </footer>
 
   <div class="mobile-bar">
+    <a data-call hidden>Call</a>
+    <a class="wa" data-wa hidden target="_blank" rel="noopener">WhatsApp</a>
+    <a href="#verify">Verify</a>
     <a href="#contact">Enquiry</a>
   </div>
 

@@ -4,10 +4,10 @@
 @media(max-width:500px){.process-grid{grid-template-columns:1fr}.hero-actions{flex-direction:column}.hero h1{font-size:47px}}
 
 [hidden]{display:none!important}
+section[id]{scroll-margin-top:80px}
 .skip{position:absolute;left:-999px}.skip:focus{left:10px;top:10px;background:#fff;padding:8px 12px;z-index:50}
 .btn.wa{background:#1fa855;color:#fff}.btn.outline{border-color:#b9c5d3;color:var(--navy);background:#fff}
 .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}.why{border-left:3px solid var(--accent);padding:6px 0 6px 18px}.why h3{font-family:"Space Grotesk";color:var(--navy);margin:0 0 8px;font-size:18px}.why p{color:var(--muted);font-size:14px;line-height:1.65;margin:0}
-.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}.chips span{border:1px solid var(--line);background:#fff;color:var(--navy);padding:10px 16px;border-radius:30px;font-size:14px;font-weight:600}
 .faq-list{margin-top:35px;max-width:860px}.faq-list details{border-bottom:1px solid var(--line);padding:18px 0}.faq-list summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:16px;list-style:none;display:flex;justify-content:space-between;gap:20px}.faq-list summary::after{content:"+";color:var(--accent);font-size:22px;line-height:1}.faq-list details[open] summary::after{content:"−"}.faq-list summary::-webkit-details-marker{display:none}.faq-list details p{color:var(--muted);line-height:1.7;margin:12px 0 0;font-size:15px}
 .form label{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:-6px}.form .hp{position:absolute;left:-9999px}
 .form-msg{padding:12px 14px;border-radius:8px;font-size:14px;line-height:1.5}.form-msg.ok{background:#e6f7f1;color:#0b6b4b}.form-msg.err{background:#fdecec;color:#9b1c1c}
@@ -17,3 +17,15 @@
 .legal{padding:70px 0}.legal h1{font-family:"Space Grotesk";color:var(--navy);font-size:40px;margin:0 0 10px}.legal h2{font-size:26px!important;margin:50px 0 14px!important}.legal h3{color:var(--navy);margin:26px 0 8px;font-size:17px}.legal p,.legal li{color:#3d4a5e;line-height:1.8;font-size:15px}.legal .note{background:var(--paper);border-left:3px solid var(--accent);padding:14px 18px;font-size:14px;color:var(--muted)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media(max-width:800px){.why-grid{grid-template-columns:1fr}.mobile-bar{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:30;background:#fff;border-top:1px solid var(--line);padding:8px;gap:8px}.mobile-bar a{flex:1;text-align:center;padding:12px 6px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;color:#fff;background:var(--navy)}.mobile-bar a.wa{background:#1fa855}body{padding-bottom:64px}.footer-links{margin-top:14px}}
+
+.verify{background:#fff}.verify-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}.verify-note{color:var(--muted);line-height:1.8;font-size:16px;max-width:460px}
+.vresult{margin-top:18px}.vcard{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 15px 40px rgba(7,24,47,.06)}
+.vbanner{padding:14px 18px;font-weight:700;font-size:14px;display:flex;gap:10px;align-items:center}
+.vcard.ok .vbanner{background:#e6f7f1;color:#0b6b4b}.vcard.bad .vbanner{background:#fdecec;color:#9b1c1c}.vcard.off .vbanner{background:#eef1f5;color:#43525c}
+.vbody{display:flex;gap:18px;padding:20px;align-items:flex-start}
+.vphoto{width:96px;height:112px;border-radius:10px;background:#dce9e7;flex:none;overflow:hidden;display:grid;place-items:center;font:700 34px "Space Grotesk",sans-serif;color:var(--navy)}.vphoto img{width:100%;height:100%;object-fit:cover}
+.vlist{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin:0;font-size:14px}.vlist dt{color:var(--muted)}.vlist dd{margin:0;font-weight:700;color:var(--navy);overflow-wrap:anywhere}
+.vlist .st-ok{color:#0b6b4b}.vlist .st-bad{color:#9b1c1c}.vlist .st-off{color:#43525c}
+.vfoot{padding:0 20px 18px;color:var(--muted);font-size:13px;line-height:1.6}
+.vnf{border:1px solid #f0c9c9;background:#fdecec;color:#9b1c1c;border-radius:12px;padding:16px 18px;line-height:1.6;font-size:14px}
+@media(max-width:800px){.verify-grid{grid-template-columns:1fr;gap:35px}.vbody{flex-direction:column}}
