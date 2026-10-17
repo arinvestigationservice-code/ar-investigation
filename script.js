@@ -16,87 +16,94 @@ const CONFIG = {
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
 
+/* Old ID-card QR links (.../?id=XX#verify on the home page) go to the verify page */
+(function () {
+  if (document.body.dataset.page !== "home") return;
+  const id = (new URLSearchParams(location.search).get("id") || "").trim();
+  if (id || location.hash === "#verify") {
+    location.replace("verify.html" + (id ? "?id=" + encodeURIComponent(id) : ""));
+  }
+})();
+
 /* Menu */
-const menuBtn = $(".menu-btn"), navLinks = $("#navLinks");
-menuBtn.addEventListener("click", () => {
-  const open = navLinks.classList.toggle("open");
-  menuBtn.setAttribute("aria-expanded", open);
-});
-$$("#navLinks a").forEach(a => a.addEventListener("click", () => {
-  navLinks.classList.remove("open");
+const menuBtn = $("#menuBtn"), siteNav = $("#siteNav");
+function closeMenu() {
+  if (!menuBtn) return;
+  siteNav.classList.remove("nav--open");
   menuBtn.setAttribute("aria-expanded", "false");
-}));
+}
+if (menuBtn && siteNav) {
+  menuBtn.addEventListener("click", () => {
+    const open = siteNav.classList.toggle("nav--open");
+    menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+}
 
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") { navLinks.classList.remove("open"); menuBtn.setAttribute("aria-expanded", "false"); }
-});
-
-$("#year").textContent = new Date().getFullYear();
+const yr = $("#year");
+if (yr) yr.textContent = new Date().getFullYear();
 
 /* Phone / WhatsApp buttons */
 if (CONFIG.phone) {
   const digits = CONFIG.phone.replace(/\D/g, "");
-  const pretty = "+" + digits;
-  $$("[data-call]").forEach(el => {
-    el.href = "tel:" + pretty;
-    el.hidden = false;
-  });
-  $$("[data-wa]").forEach(el => {
+  $$("[data-call]").forEach((el) => { el.href = "tel:+" + digits; el.hidden = false; });
+  $$("[data-wa]").forEach((el) => {
     el.href = "https://wa.me/" + digits + "?text=" + encodeURIComponent("Hello, I would like to discuss a verification requirement.");
     el.hidden = false;
   });
 }
 if (CONFIG.registration) {
   const r = $("#regLine");
-  r.textContent = CONFIG.registration;
-  r.hidden = false;
+  if (r) { r.textContent = CONFIG.registration; r.hidden = false; }
 }
 
-/* Enquiry form */
-const form = $("#enquiryForm"), msg = $("#formMsg"), btn = $("#submitBtn");
-function showMsg(text, ok) {
-  msg.textContent = text;
-  msg.className = "form-msg " + (ok ? "ok" : "err");
-  msg.hidden = false;
-}
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  if (form.company.value) return; // honeypot (bots)
-  const name = form.name.value.trim();
-  const phone = form.phone.value.trim();
-  const email = form.email.value.trim();
-  const service = form.service.value;
-  const message = form.message.value.trim();
+/* Enquiry form (contact page) */
+const form = $("#enquiryForm");
+if (form) {
+  const msg = $("#formMsg"), btn = $("#submitBtn");
+  const showMsg = (text, ok) => {
+    msg.textContent = text;
+    msg.className = "form-msg " + (ok ? "ok" : "err");
+    msg.hidden = false;
+  };
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (form.company.value) return; // honeypot (bots)
+    const name = form.name.value.trim();
+    const phone = form.phone.value.trim();
+    const email = form.email.value.trim();
+    const service = form.service.value;
+    const message = form.message.value.trim();
 
-  if (!name || !phone || !service) return showMsg("Please fill name, mobile number and service.", false);
-  if (!/^[+\d][\d\s-]{7,}$/.test(phone)) return showMsg("Please enter a valid mobile number.", false);
-  if (email && !/^\S+@\S+\.\S+$/.test(email)) return showMsg("Please enter a valid email address.", false);
+    if (!name || !phone || !service) return showMsg("Please fill in your name, mobile number and the service you need.", false);
+    if (!/^[+\d][\d\s-]{7,}$/.test(phone)) return showMsg("Enter a valid mobile number, for example 98765 43210.", false);
+    if (email && !/^\S+@\S+\.\S+$/.test(email)) return showMsg("Enter a valid email address, or leave the email field empty.", false);
 
-  if (CONFIG.formEndpoint) {
-    btn.disabled = true; btn.textContent = "Sending...";
-    try {
-      const res = await fetch(CONFIG.formEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({ name, phone, email, service, message, _subject: "New Verification Enquiry - " + service })
-      });
-      if (!res.ok) throw new Error("fail");
-      form.reset();
-      showMsg("Thank you! Your enquiry has been sent. We will contact you soon.", true);
-    } catch (err) {
-      showMsg("Could not send right now. Please email us at " + CONFIG.email + ".", false);
+    if (CONFIG.formEndpoint) {
+      btn.disabled = true; btn.textContent = "Sending...";
+      try {
+        const res = await fetch(CONFIG.formEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify({ name, phone, email, service, message, _subject: "New verification enquiry - " + service })
+        });
+        if (!res.ok) throw new Error("fail");
+        form.reset();
+        showMsg("Enquiry sent. We will contact you soon.", true);
+      } catch (err) {
+        showMsg("The enquiry did not send. Email us at " + CONFIG.email + " instead.", false);
+      }
+      btn.disabled = false; btn.textContent = "Send enquiry";
+      return;
     }
-    btn.disabled = false; btn.textContent = "Send Enquiry";
-    return;
-  }
 
-  /* Fallback: open email app */
-  const subject = encodeURIComponent("New Verification Enquiry - " + service);
-  const body = encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nService: ${service}\n\nRequirement:\n${message}`);
-  showMsg("Opening your email app. If nothing opens, please email " + CONFIG.email + " directly.", true);
-  window.location.href = `mailto:${CONFIG.email}?subject=${subject}&body=${body}`;
-});
-
+    /* Fallback: open email app */
+    const subject = encodeURIComponent("New verification enquiry - " + service);
+    const body = encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nService: ${service}\n\nRequirement:\n${message}`);
+    showMsg("Opening your email app. If nothing opens, email " + CONFIG.email + " directly.", true);
+    window.location.href = `mailto:${CONFIG.email}?subject=${subject}&body=${body}`;
+  });
+}
 
 /* ===== Staff verification (ID number + captcha) ===== */
 const vForm = $("#verifyForm"), vBtn = $("#verifyBtn"), vOut = $("#verifyResult");
@@ -128,7 +135,7 @@ function drawCaptcha() {
   ctx.fillStyle = "#f3f6fa";
   ctx.fillRect(0, 0, w, h);
   for (let i = 0; i < 7; i++) {
-    ctx.strokeStyle = "rgba(7,24,47," + (0.15 + rnd(20) / 100) + ")";
+    ctx.strokeStyle = "rgba(11,31,58," + (0.15 + rnd(20) / 100) + ")";
     ctx.lineWidth = 1 + rnd(2);
     ctx.beginPath();
     ctx.moveTo(rnd(w), rnd(h));
@@ -136,7 +143,7 @@ function drawCaptcha() {
     ctx.stroke();
   }
   for (let i = 0; i < 40; i++) {
-    ctx.fillStyle = "rgba(24,166,166," + (0.2 + rnd(30) / 100) + ")";
+    ctx.fillStyle = "rgba(11,124,124," + (0.2 + rnd(30) / 100) + ")";
     ctx.fillRect(rnd(w), rnd(h), 2, 2);
   }
   const step = w / (captchaText.length + 1);
@@ -146,8 +153,8 @@ function drawCaptcha() {
     ctx.save();
     ctx.translate(step * (i + 1), h / 2 + (rnd(11) - 5));
     ctx.rotate((rnd(41) - 20) * Math.PI / 180);
-    ctx.font = "700 " + (28 + rnd(8)) + "px 'Space Grotesk', Arial, sans-serif";
-    ctx.fillStyle = "#07182f";
+    ctx.font = "700 " + (28 + rnd(8)) + "px 'Source Serif 4', Georgia, serif";
+    ctx.fillStyle = "#0B1F3A";
     ctx.fillText(captchaText[i], 0, 0);
     ctx.restore();
   }
@@ -174,9 +181,9 @@ function newCaptcha() {
 function showNotFound() {
   vOut.replaceChildren();
   const box = el("div", "vnf");
-  box.append(el("b", "", "No matching record found."));
+  box.append(el("b", "", "No record found for this ID."));
   box.append(document.createElement("br"));
-  box.append("Please check the ID number. If this person cannot be verified, do not treat them as an A R Investigation representative. Contact us at " + CONFIG.email + ".");
+  box.append("Check the ID number. If it is correct, do not treat this person as an A R Investigation representative. Email us at " + CONFIG.email + ".");
   vOut.append(box);
   vOut.hidden = false;
 }
@@ -185,8 +192,8 @@ function showStaff(r) {
   const kind = status === "Active" ? "ok" : (status === "Left" ? "off" : "bad");
   const card = el("div", "vcard " + kind);
   card.append(el("div", "vbanner",
-    kind === "ok" ? "✓ Verified: authorised A R Investigation representative"
-      : "✕ NOT an authorised representative (status: " + status + ")"));
+    kind === "ok" ? "Verified: authorised A R Investigation representative"
+      : "Not an authorised representative (status: " + status + ")"));
   const body = el("div", "vbody");
   const photo = el("div", "vphoto");
   if (typeof r.photo === "string" && r.photo.indexOf("data:image/") === 0) {
@@ -208,7 +215,7 @@ function showStaff(r) {
   if (status === "Terminated") add("Terminated on", fmtDate(r.term), "st-bad");
   body.append(photo, dl);
   card.append(body);
-  if (kind !== "ok") card.append(el("div", "vfoot", "If this person is working in the field on our behalf, please contact us at " + CONFIG.email + "."));
+  if (kind !== "ok") card.append(el("div", "vfoot", "If this person is working in the field on our behalf, email us at " + CONFIG.email + "."));
   vOut.replaceChildren(card);
   vOut.hidden = false;
 }
@@ -229,8 +236,7 @@ async function verifyStaff(id) {
     if (data && data.name) showStaff(data); else showNotFound();
   } catch (err) {
     console.error("Verify failed:", err);
-    const box = el("div", "vnf", "Could not check right now. Please try again, or email us at " + CONFIG.email + ".");
-    box.append(document.createElement("br"));
+    const box = el("div", "vnf", "The check did not go through. Try again, or email us at " + CONFIG.email + ".");
     box.append(el("small", "", "Technical detail: " + (err && err.message ? err.message : "network error")));
     vOut.replaceChildren(box);
     vOut.hidden = false;
@@ -241,28 +247,29 @@ function vMsg(text) {
   vOut.replaceChildren(el("div", "vnf", text));
   vOut.hidden = false;
 }
-if (vForm) vForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const id = vForm.vid.value.trim(), cap = vForm.vcaptcha.value.trim().toUpperCase();
-  if (!id || !cap) return vMsg("Please enter the ID number and the captcha code.");
-  if (cap !== captchaText) {
+if (vForm) {
+  vForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const id = vForm.vid.value.trim(), cap = vForm.vcaptcha.value.trim().toUpperCase();
+    if (!id || !cap) return vMsg("Enter the ID number and the captcha code.");
+    if (cap !== captchaText) {
+      vForm.vcaptcha.value = "";
+      newCaptcha();
+      return vMsg("The captcha code is wrong. Type the new code shown above.");
+    }
     vForm.vcaptcha.value = "";
-    newCaptcha();
-    return vMsg("The captcha code is wrong. Please type the new code shown in the picture.");
-  }
-  vForm.vcaptcha.value = "";
-  newCaptcha();   // every check needs a fresh captcha
-  verifyStaff(id);
-});
-const capNew = $("#captchaNew");
-if (capNew) capNew.addEventListener("click", () => { newCaptcha(); vForm.vcaptcha.value = ""; vForm.vcaptcha.focus(); });
-if (vForm) newCaptcha();
+    newCaptcha();   // every check needs a fresh captcha
+    verifyStaff(id);
+  });
+  const capNew = $("#captchaNew");
+  if (capNew) capNew.addEventListener("click", () => { newCaptcha(); vForm.vcaptcha.value = ""; vForm.vcaptcha.focus(); });
+  newCaptcha();
 
-/* QR scan: ?id=... fills the ID number, the visitor then types the captcha */
-(function () {
-  const id = (new URLSearchParams(location.search).get("id") || "").trim();
-  if (!id || !vForm) return;
-  vForm.vid.value = id;
-  history.replaceState(null, "", location.pathname + "#verify");
-  vForm.vcaptcha.focus({ preventScroll: true });
-})();
+  /* QR scan: ?id=... fills the ID number, the visitor then types the captcha */
+  const qid = (new URLSearchParams(location.search).get("id") || "").trim();
+  if (qid) {
+    vForm.vid.value = qid;
+    history.replaceState(null, "", location.pathname);
+    vForm.vcaptcha.focus({ preventScroll: true });
+  }
+}
