@@ -1,9 +1,12 @@
 -- Run this ONCE in Supabase: SQL Editor -> New query -> paste -> Run.
--- It lets the public website check ONE person (ID number + verification code)
--- and returns only: name, role, ID, city, joining date, status, photo.
+-- (Safe to run again. It also removes the older version that needed a code.)
+-- It lets the public website look up ONE person by ID number and returns only:
+-- name, role, ID, city, joining date, status, termination date, photo.
 -- Your tables stay private (RLS untouched). Mobile, address and documents are never exposed.
 
-create or replace function public.verify_person(p_eid text, p_code text)
+drop function if exists public.verify_person(text, text);
+
+create or replace function public.verify_person(p_eid text)
 returns json
 language sql
 security definer
@@ -22,11 +25,9 @@ as $$
   )
   from public.vault_people
   where length(trim(coalesce(p_eid,''))) > 0
-    and length(trim(coalesce(p_code,''))) >= 6
     and lower(data->>'eid') = lower(trim(p_eid))
-    and upper(coalesce(data->>'code','')) = upper(trim(p_code))
   limit 1;
 $$;
 
-revoke all on function public.verify_person(text, text) from public;
-grant execute on function public.verify_person(text, text) to anon, authenticated;
+revoke all on function public.verify_person(text) from public;
+grant execute on function public.verify_person(text) to anon, authenticated;

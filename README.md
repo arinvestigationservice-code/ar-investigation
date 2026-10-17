@@ -22,9 +22,10 @@ Also check: location text ("Agra, Uttar Pradesh, India") in index.html.
 
 ## Staff verification (ID card QR)
 1. Supabase -> SQL Editor: run `supabase-verify.sql` once.
-2. Vault -> Settings -> "Website address": paste this website's URL (e.g. https://yourname.github.io/ar-investigation).
-3. Vault -> ID Cards: every person gets a Verification Code automatically. The QR on the back opens
-   `<website>/?id=...&code=...`, which verifies automatically. The ID number and code are also printed on the card.
+2. Vault -> ID Cards: the QR on the back opens
+   https://arinvestigationservice-code.github.io/ar-investigation/?id=<ID>#verify
+   (Vault -> Settings -> "Website address" can change the base link).
+3. The visitor enters the ID number (prefilled from the QR) and the captcha code, then taps Verify.
 4. Terminate a person from their vault profile (admin only): the letter is required, saved in the vault,
    and the website shows the person as Terminated.
-Re-print ID cards after step 2, because old cards do not have the new QR.
+Re-print ID cards after this update, because old cards do not have the new QR.

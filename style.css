@@ -29,3 +29,5 @@ section[id]{scroll-margin-top:80px}
 .vfoot{padding:0 20px 18px;color:var(--muted);font-size:13px;line-height:1.6}
 .vnf{border:1px solid #f0c9c9;background:#fdecec;color:#9b1c1c;border-radius:12px;padding:16px 18px;line-height:1.6;font-size:14px}
 @media(max-width:800px){.verify-grid{grid-template-columns:1fr;gap:35px}.vbody{flex-direction:column}}
+
+.captcha-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.captcha-row canvas{border:1px solid var(--line);border-radius:8px;background:#f3f6fa;max-width:100%;height:auto}.captcha-row .btn{padding:10px 14px}

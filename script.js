@@ -98,8 +98,10 @@ form.addEventListener("submit", async (e) => {
 });
 
 
-/* ===== Staff verification (ID number + verification code) ===== */
+/* ===== Staff verification (ID number + captcha) ===== */
 const vForm = $("#verifyForm"), vBtn = $("#verifyBtn"), vOut = $("#verifyResult");
+const capCanvas = $("#captchaCanvas");
+let captchaText = "";
 
 function el(tag, cls, text) {
   const n = document.createElement(tag);
@@ -113,12 +115,53 @@ function fmtDate(d) {
   if (!m) return d;
   return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 }
+
+/* Captcha: random 5 characters (no confusing 0/O/1/I), drawn with noise on a canvas */
+function rnd(n) {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] % n;
+}
+function newCaptcha() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  captchaText = Array.from({ length: 5 }, () => chars[rnd(chars.length)]).join("");
+  if (!capCanvas || !capCanvas.getContext) return;
+  const ctx = capCanvas.getContext("2d"), w = capCanvas.width, h = capCanvas.height;
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = "#f3f6fa";
+  ctx.fillRect(0, 0, w, h);
+  for (let i = 0; i < 7; i++) {
+    ctx.strokeStyle = "rgba(7,24,47," + (0.15 + rnd(20) / 100) + ")";
+    ctx.lineWidth = 1 + rnd(2);
+    ctx.beginPath();
+    ctx.moveTo(rnd(w), rnd(h));
+    ctx.bezierCurveTo(rnd(w), rnd(h), rnd(w), rnd(h), rnd(w), rnd(h));
+    ctx.stroke();
+  }
+  for (let i = 0; i < 40; i++) {
+    ctx.fillStyle = "rgba(24,166,166," + (0.2 + rnd(30) / 100) + ")";
+    ctx.fillRect(rnd(w), rnd(h), 2, 2);
+  }
+  const step = w / (captchaText.length + 1);
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "center";
+  for (let i = 0; i < captchaText.length; i++) {
+    ctx.save();
+    ctx.translate(step * (i + 1), h / 2 + (rnd(11) - 5));
+    ctx.rotate((rnd(41) - 20) * Math.PI / 180);
+    ctx.font = "700 " + (28 + rnd(8)) + "px 'Space Grotesk', Arial, sans-serif";
+    ctx.fillStyle = "#07182f";
+    ctx.fillText(captchaText[i], 0, 0);
+    ctx.restore();
+  }
+}
+
 function showNotFound() {
   vOut.replaceChildren();
   const box = el("div", "vnf");
   box.append(el("b", "", "No matching record found."));
   box.append(document.createElement("br"));
-  box.append("Please check the ID number and code. If this person cannot be verified, do not treat them as an A R Investigation representative. Contact us at " + CONFIG.email + ".");
+  box.append("Please check the ID number. If this person cannot be verified, do not treat them as an A R Investigation representative. Contact us at " + CONFIG.email + ".");
   vOut.append(box);
   vOut.hidden = false;
 }
@@ -154,13 +197,13 @@ function showStaff(r) {
   vOut.replaceChildren(card);
   vOut.hidden = false;
 }
-async function verifyStaff(id, code) {
+async function verifyStaff(id) {
   vBtn.disabled = true; vBtn.textContent = "Checking...";
   try {
     const res = await fetch(CONFIG.supabaseUrl + "/rest/v1/rpc/verify_person", {
       method: "POST",
       headers: { "apikey": CONFIG.supabaseKey, "Content-Type": "application/json" },
-      body: JSON.stringify({ p_eid: id, p_code: code })
+      body: JSON.stringify({ p_eid: id })
     });
     if (!res.ok) throw new Error("http " + res.status);
     const data = await res.json();
@@ -171,21 +214,31 @@ async function verifyStaff(id, code) {
   }
   vBtn.disabled = false; vBtn.textContent = "Verify";
 }
+function vMsg(text) {
+  vOut.replaceChildren(el("div", "vnf", text));
+  vOut.hidden = false;
+}
 vForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const id = vForm.vid.value.trim(), code = vForm.vcode.value.trim();
-  if (!id || !code) {
-    vOut.replaceChildren(el("div", "vnf", "Please enter both the ID number and the verification code."));
-    vOut.hidden = false;
-    return;
+  const id = vForm.vid.value.trim(), cap = vForm.vcaptcha.value.trim().toUpperCase();
+  if (!id || !cap) return vMsg("Please enter the ID number and the captcha code.");
+  if (cap !== captchaText) {
+    vForm.vcaptcha.value = "";
+    newCaptcha();
+    return vMsg("The captcha code is wrong. Please type the new code shown in the picture.");
   }
-  verifyStaff(id, code);
+  vForm.vcaptcha.value = "";
+  newCaptcha();   // every check needs a fresh captcha
+  verifyStaff(id);
 });
-/* QR scan: ?id=...&code=... opens the page and verifies automatically */
+$("#captchaNew").addEventListener("click", () => { newCaptcha(); vForm.vcaptcha.value = ""; vForm.vcaptcha.focus(); });
+newCaptcha();
+
+/* QR scan: ?id=... fills the ID number, the visitor then types the captcha */
 (function () {
-  const q = new URLSearchParams(location.search), id = (q.get("id") || "").trim(), code = (q.get("code") || "").trim();
-  if (!id || !code) return;
-  vForm.vid.value = id; vForm.vcode.value = code;
-  history.replaceState(null, "", location.pathname + "#verify"); // code address bar mein na dikhe
-  verifyStaff(id, code);
+  const id = (new URLSearchParams(location.search).get("id") || "").trim();
+  if (!id) return;
+  vForm.vid.value = id;
+  history.replaceState(null, "", location.pathname + "#verify");
+  vForm.vcaptcha.focus({ preventScroll: true });
 })();

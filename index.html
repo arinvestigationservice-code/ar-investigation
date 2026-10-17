@@ -136,14 +136,18 @@
         <div>
           <div class="eyebrow">VERIFY OUR STAFF</div>
           <h2>Is this person really <span>from us?</span></h2>
-          <p class="verify-note">Every A R Investigation field executive and coordinator carries an ID card. Scan the QR code on the card, or enter the ID number and verification code printed on it.</p>
+          <p class="verify-note">Every A R Investigation field executive and coordinator carries an ID card. Scan the QR code on the card, or enter the ID number printed on it. Then type the captcha code shown in the picture.</p>
         </div>
         <div>
           <form class="form" id="verifyForm" novalidate>
             <label for="vid">ID number</label>
             <input id="vid" name="vid" required autocomplete="off" autocapitalize="characters" placeholder="Example: FE-101">
-            <label for="vcode">Verification code</label>
-            <input id="vcode" name="vcode" required autocomplete="off" autocapitalize="characters" maxlength="12" placeholder="Code printed on the ID card">
+            <label for="vcaptcha">Captcha code</label>
+            <div class="captcha-row">
+              <canvas id="captchaCanvas" width="190" height="56" role="img" aria-label="Captcha image"></canvas>
+              <button type="button" class="btn outline" id="captchaNew" aria-label="Show a new captcha">↻ New</button>
+            </div>
+            <input id="vcaptcha" name="vcaptcha" required autocomplete="off" autocapitalize="characters" maxlength="8" placeholder="Type the code from the picture">
             <button class="btn primary" type="submit" id="verifyBtn">Verify</button>
           </form>
           <div id="verifyResult" class="vresult" aria-live="polite" hidden></div>
