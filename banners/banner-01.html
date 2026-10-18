@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A R Investigation Service</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #060f20; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: #fff; overflow-x: hidden; }
+
+  .hero {
+    position: relative; width: 100%; height: auto; min-height: 540px; overflow: hidden;
+    display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; padding: 40px 7%;
+    background: radial-gradient(ellipse at 70% 45%, #10305c 0%, #0a1c38 45%, #060f20 100%);
+  }
+
+  /* aurora blobs */
+  .blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .55; animation: drift 14s ease-in-out infinite alternate; }
+  .b1 { width: 460px; height: 460px; background: #1f6bff; left: -120px; top: -120px; }
+  .b2 { width: 380px; height: 380px; background: #d4a853; right: 8%; bottom: -160px; opacity: .35; animation-delay: -5s; }
+  .b3 { width: 320px; height: 320px; background: #13b5a0; right: 30%; top: -140px; opacity: .3; animation-delay: -9s; }
+  @keyframes drift { to { transform: translate(60px, 40px) scale(1.15); } }
+
+  /* dotted grid */
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,.13) 1.2px, transparent 1.5px);
+    background-size: 34px 34px;
+    -webkit-mask-image: radial-gradient(ellipse at 65% 50%, #000 0%, transparent 70%);
+            mask-image: radial-gradient(ellipse at 65% 50%, #000 0%, transparent 70%);
+  }
+
+  /* NAV */
+  .nav { position: absolute; top: 0; left: 0; right: 0; z-index: 5; padding: 26px 7%; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: .02em; font-size: 18px; }
+  .logo i { width: 40px; height: 40px; border-radius: 11px; background: #d4a853; color: #0a1c38; display: grid; place-items: center; font-style: normal; font-weight: 900; font-size: 17px; }
+  .nav ul { display: flex; gap: 30px; list-style: none; font-size: 15px; font-weight: 600; color: #c4d2e6; }
+
+  /* TEXT */
+  .left { position: relative; z-index: 3; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); backdrop-filter: blur(6px);
+    padding: 8px 16px 8px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #ffd98a;
+    opacity: 0; animation: up .8s .1s forwards;
+  }
+  .chip i { width: 9px; height: 9px; border-radius: 50%; background: #3ddc97; box-shadow: 0 0 0 5px rgba(61,220,151,.25); animation: pulse 1.8s infinite; }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 9px rgba(61,220,151,0); } }
+
+  h1 { margin-top: 22px; font-size: clamp(34px, 4.6vw, 68px); line-height: 1.02; font-weight: 900; letter-spacing: -.035em; }
+  h1 .w { display: inline-block; opacity: 0; transform: translateY(40px); animation: up .9s forwards; }
+  h1 .w:nth-child(1) { animation-delay: .3s; } h1 .w:nth-child(2) { animation-delay: .45s; } h1 .w:nth-child(3) { animation-delay: .6s; }
+  h1 .w:nth-child(4) { animation-delay: .8s; } h1 .w:nth-child(5) { animation-delay: .95s; } h1 .w:nth-child(6) { animation-delay: 1.1s; }
+  h1 .g { background: linear-gradient(90deg, #ffd98a, #d4a853 60%, #f7e2ae); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  @keyframes up { to { opacity: 1; transform: none; } }
+
+  .lead { margin-top: 24px; font-size: clamp(16px, 1.5vw, 21px); line-height: 1.65; color: #b9c9df; max-width: 560px; opacity: 0; animation: up .9s 1.3s forwards; }
+
+  .cta { display: flex; gap: 14px; margin-top: 34px; flex-wrap: wrap; opacity: 0; animation: up .9s 1.5s forwards; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+    padding: 15px 28px; border-radius: 12px; font-weight: 800; font-size: 16px; transition: transform .2s, box-shadow .2s;
+  }
+  .btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .btn.gold { background: linear-gradient(90deg, #d4a853, #f0cd85); color: #0a1c38; box-shadow: 0 10px 30px rgba(212,168,83,.35); }
+  .btn.wa { background: #1fb85a; color: #fff; box-shadow: 0 10px 30px rgba(31,184,90,.3); }
+  .btn:hover { transform: translateY(-3px); }
+
+  .mini { display: flex; gap: 26px; margin-top: 34px; flex-wrap: wrap; opacity: 0; animation: up .9s 1.7s forwards; font-size: 15px; font-weight: 600; color: #d6e2f2; }
+  .mini div { display: flex; align-items: center; gap: 9px; }
+  .mini svg { width: 18px; height: 18px; stroke: #3ddc97; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ORBIT VISUAL */
+  .right { position: relative; z-index: 2; display: grid; place-items: center; height: 100%; }
+  .orbit { position: relative; width: min(88%, 620px); aspect-ratio: 1; }
+  .ring { position: absolute; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.16); }
+  .r1 { inset: 0; animation: spin 46s linear infinite; }
+  .r2 { inset: 14%; animation: spin 32s linear infinite reverse; border-style: dashed; border-color: rgba(212,168,83,.35); }
+  .r3 { inset: 28%; animation: spin 22s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .node {
+    position: absolute; width: 46px; height: 46px; margin: -23px; border-radius: 50%;
+    background: #fff; display: grid; place-items: center; box-shadow: 0 0 0 7px rgba(61,220,151,.22), 0 10px 24px rgba(0,0,0,.4);
+  }
+  .node svg { width: 22px; height: 22px; stroke: #12a46a; fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+  .node.gold { box-shadow: 0 0 0 7px rgba(212,168,83,.25), 0 10px 24px rgba(0,0,0,.4); }
+  .node.gold svg { stroke: #b4852a; stroke-width: 2.2; }
+  /* keep nodes upright while ring spins */
+  .r1 .node { animation: spinr 46s linear infinite; } .r2 .node { animation: spin 32s linear infinite; } .r3 .node { animation: spinr 22s linear infinite; }
+  @keyframes spinr { to { transform: rotate(-360deg); } }
+
+  .core {
+    position: absolute; left: 50%; top: 50%; width: 36%; aspect-ratio: 1; transform: translate(-50%,-50%); border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #2a7bff, #0e3d8f 70%); display: grid; place-items: center;
+    box-shadow: 0 0 80px rgba(42,123,255,.6), inset 0 0 40px rgba(255,255,255,.18);
+    animation: breathe 4s ease-in-out infinite;
+  }
+  @keyframes breathe { 50% { transform: translate(-50%,-50%) scale(1.06); } }
+  .core svg { width: 52%; fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  .float {
+    position: absolute; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.25); backdrop-filter: blur(8px);
+    padding: 11px 16px; border-radius: 14px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 9px;
+    animation: bob 5s ease-in-out infinite alternate; box-shadow: 0 12px 30px rgba(0,0,0,.3);
+  }
+  .float i { width: 22px; height: 22px; border-radius: 50%; background: #1fb85a; display: grid; place-items: center; }
+  .float i svg { width: 12px; height: 12px; stroke: #fff; fill: none; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+  .fa { left: -4%; top: 14%; } .fb { right: -2%; top: 46%; animation-delay: -2s; } .fc { left: 6%; bottom: 8%; animation-delay: -3.5s; }
+  @keyframes bob { to { transform: translateY(-14px); } }
+
+  .scroll { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 4; font-size: 12px; letter-spacing: .3em; color: #7f93ad; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .scroll::after { content: ""; width: 2px; height: 30px; background: linear-gradient(#d4a853, transparent); animation: drop 1.8s infinite; }
+  @keyframes drop { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; height: auto; min-height: 0; padding: 44px 7% 30px; }
+    .nav ul { display: none; }
+    .right { height: 300px; margin-top: 10px; }
+    .orbit { width: 270px; } .float { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; opacity: 1 !important; transform: none !important; } .core { transform: translate(-50%,-50%) !important; } }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+
+    <div class="left">
+      <span class="chip"><i></i>Field Verification Service</span>
+      <h1>
+        <span class="w">Every</span> <span class="w">address.</span><br>
+        <span class="w">Every</span> <span class="w g">location.</span><br>
+        <span class="w">Verified.</span>
+      </h1>
+      <p class="lead">Our field team goes to the address in person, confirms the facts on site and delivers a clear, reliable report.</p>
+      <div class="mini">
+        <div><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Residence</div>
+        <div><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Business</div>
+        <div><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Address</div>
+      </div>
+    </div>
+
+    <div class="right" aria-hidden="true">
+      <div class="orbit">
+        <div class="ring r1">
+          <div class="node" style="left:50%;top:0"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div>
+          <div class="node" style="left:100%;top:50%"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div>
+          <div class="node" style="left:15%;top:85%"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div>
+        </div>
+        <div class="ring r2">
+          <div class="node gold" style="left:0;top:50%"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+          <div class="node gold" style="left:85%;top:85%"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+        </div>
+        <div class="ring r3">
+          <div class="node" style="left:50%;top:100%"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div>
+        </div>
+        <div class="core"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.6-3.4 8-8 9-4.6-1-8-4.4-8-9V6z"/><path d="M8.5 12l2.5 2.5L16 9.5"/></svg></div>
+
+        <div class="float fa"><i><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></i>On-site check done</div>
+        <div class="float fb"><i><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></i>Address verified</div>
+        <div class="float fc"><i><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></i>Report delivered</div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
