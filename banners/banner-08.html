@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A R Investigation Service – Hero v13</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", Arial, sans-serif; background: #17313b; }
+
+  .hero {
+    position: relative; width: 100%;
+    aspect-ratio: 12 / 5; min-height: 440px; overflow: hidden;
+    display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 0 7%;
+    color: #fff;
+    background:
+      radial-gradient(ellipse at 75% 50%, rgba(255,255,255,.10), transparent 60%),
+      linear-gradient(135deg, #17313b 0%, #0f242c 100%);
+  }
+
+  .left { position: relative; z-index: 2; }
+  .eyebrow { font-size: clamp(11px, 1vw, 14px); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #f2b05e; margin-bottom: 14px; }
+  h1 { font-size: clamp(30px, 4.3vw, 62px); line-height: 1.08; font-weight: 800; letter-spacing: -.02em; }
+  h1 span { color: #f2b05e; }
+  .lead { margin-top: 16px; font-size: clamp(14px, 1.45vw, 19px); line-height: 1.65; color: #bcd0d6; max-width: 500px; }
+  .tags { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+  .tags span { border: 1.5px solid rgba(242,176,94,.7); color: #f2b05e; border-radius: 8px; padding: 7px 14px; font-size: clamp(11px, 1.05vw, 14px); font-weight: 700; letter-spacing: .05em; }
+
+  /* paper report with stamp */
+  .right { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; height: 100%; }
+  .paper {
+    position: relative; width: min(64%, 340px); aspect-ratio: 3 / 4;
+    background: #fdfaf3; color: #2b3a40; border-radius: 6px; padding: 22px 22px;
+    box-shadow: 0 30px 60px rgba(0,0,0,.5); transform: rotate(-4deg);
+  }
+  .paper.back { position: absolute; transform: rotate(5deg) translate(26px, 10px); background: #efe8d8; box-shadow: 0 20px 40px rgba(0,0,0,.4); }
+  .paper h5 { font-size: clamp(11px, 1.05vw, 14px); letter-spacing: .14em; color: #17313b; border-bottom: 2px solid #17313b; padding-bottom: 8px; margin-bottom: 14px; }
+  .paper .ln { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; font-size: clamp(10px, .95vw, 13px); font-weight: 600; }
+  .paper .ln i { width: 14px; height: 14px; border: 2px solid #17313b; border-radius: 3px; position: relative; flex: none; }
+  .paper .ln i::after { content: ""; position: absolute; left: 3px; top: -1px; width: 4px; height: 8px; border: solid #1c9a5e; border-width: 0 2.5px 2.5px 0; transform: rotate(40deg); }
+  .paper .bar { height: 7px; border-radius: 4px; background: #e6dfcf; margin-bottom: 8px; }
+  .paper .bar.s { width: 62%; }
+  .paper .photo { width: 40%; aspect-ratio: 4 / 3; background: repeating-linear-gradient(45deg, #dfe7ea 0 8px, #e9eff1 8px 16px); border: 2px solid #c5d0d4; margin: 10px 0; }
+  .stamp {
+    position: absolute; right: -8%; bottom: 10%; transform: rotate(-16deg);
+    border: 5px solid #c73535; color: #c73535; border-radius: 12px; padding: 8px 16px;
+    font-weight: 900; letter-spacing: .12em; font-size: clamp(16px, 2vw, 28px); text-align: center; line-height: 1.05;
+    background: rgba(255,255,255,.35); opacity: .93;
+  }
+  .stamp small { display: block; font-size: .42em; letter-spacing: .24em; margin-top: 3px; }
+  .clipm { position: absolute; top: -14px; left: 50%; width: 64px; height: 28px; transform: translateX(-50%); border: 4px solid #b9bfc4; border-radius: 10px; background: transparent; }
+
+  @media (max-width: 800px) {
+    .hero { grid-template-columns: 1fr; aspect-ratio: auto; padding: 44px 7% 20px; }
+    .right { height: 460px; }
+    .paper { width: 240px; }
+  }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="left">
+      <div class="eyebrow">A R Investigation Service</div>
+      <h1>A report you can<br><span>stand behind.</span></h1>
+      <p class="lead">Each verification ends with a clear, structured report based on what our field executive actually saw at the address.</p>
+      <div class="tags"><span>Residence</span><span>Business</span><span>Address</span></div>
+    </div>
+
+    <div class="right" aria-hidden="true">
+      <div class="paper back"></div>
+      <div class="paper">
+        <div class="clipm"></div>
+        <h5>FIELD VERIFICATION REPORT</h5>
+        <div class="ln"><i></i>Address visited in person</div>
+        <div class="ln"><i></i>Details confirmed on site</div>
+        <div class="ln"><i></i>Photos and remarks attached</div>
+        <div class="photo"></div>
+        <div class="bar"></div><div class="bar s"></div>
+        <div class="stamp">VERIFIED<small>ON SITE</small></div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

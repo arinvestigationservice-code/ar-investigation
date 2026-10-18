@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A R Investigation Service – Hero v14</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", Arial, sans-serif; background: #fff4ee; }
+
+  .hero {
+    position: relative; width: 100%;
+    aspect-ratio: 12 / 5; min-height: 440px; overflow: hidden;
+    background: #fff4ee; color: #2b1d1a;
+    display: flex; flex-direction: column; justify-content: center; padding: 0 7%;
+  }
+  .hero::before {
+    content: ""; position: absolute; left: -6%; top: -30%; width: 40%; aspect-ratio: 1; border-radius: 50%;
+    background: #ffd9c7;
+  }
+  .hero::after {
+    content: ""; position: absolute; right: -8%; bottom: -40%; width: 38%; aspect-ratio: 1; border-radius: 50%;
+    background: #ffe9a8;
+  }
+
+  .top { position: relative; z-index: 2; max-width: 780px; }
+  .eyebrow { font-size: clamp(11px, 1vw, 14px); font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: #e4572e; margin-bottom: 12px; }
+  h1 { font-size: clamp(28px, 4.1vw, 58px); line-height: 1.08; font-weight: 800; letter-spacing: -.02em; }
+  h1 span { color: #e4572e; }
+  .lead { margin-top: 12px; font-size: clamp(14px, 1.4vw, 18px); line-height: 1.6; color: #6d5650; max-width: 560px; }
+
+  /* route */
+  .route { position: relative; z-index: 2; margin-top: 4%; width: 100%; }
+  .route svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .path { fill: none; stroke: #e4572e; stroke-width: 5; stroke-dasharray: 2 14; stroke-linecap: round; }
+  .stop circle.o { fill: #fff; stroke: #2b1d1a; stroke-width: 4; }
+  .stop circle.f { fill: #e4572e; }
+  .stop text { font-family: "Segoe UI", Arial, sans-serif; font-weight: 800; font-size: 19px; fill: #2b1d1a; text-anchor: middle; }
+  .stop .sub { font-weight: 500; font-size: 14px; fill: #6d5650; }
+  .bike { animation: ride 7s ease-in-out infinite alternate; }
+  @keyframes ride { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+
+  @media (max-width: 700px) {
+    .hero { aspect-ratio: auto; padding: 44px 7%; min-height: 0; }
+    .stop text { font-size: 24px; } .stop .sub { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .bike { animation: none; } }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="top">
+      <div class="eyebrow">A R Investigation Service</div>
+      <h1>Your request goes in.<br><span>Our executive goes out.</span></h1>
+      <p class="lead">From the moment a case is assigned to the day the report is delivered, we keep the process simple and on time.</p>
+    </div>
+
+    <div class="route" aria-hidden="true">
+      <svg viewBox="0 0 1000 190">
+        <path id="rt" class="path" d="M40 120 C 180 20, 300 20, 340 100 S 520 190, 660 100 S 860 20, 960 110"/>
+        <g class="stop"><circle class="o" cx="40" cy="120" r="16"/><circle class="f" cx="40" cy="120" r="6"/><text x="40" y="166">Request</text></g>
+        <g class="stop"><circle class="o" cx="340" cy="100" r="16"/><circle class="f" cx="340" cy="100" r="6"/><text x="340" y="146">Field visit</text></g>
+        <g class="stop"><circle class="o" cx="660" cy="100" r="16"/><circle class="f" cx="660" cy="100" r="6"/><text x="660" y="146">Verification</text></g>
+        <g class="stop"><circle class="o" cx="960" cy="110" r="16"/><circle class="f" cx="960" cy="110" r="6"/><text x="960" y="156" style="text-anchor:end">Report</text></g>
+        <g class="bike" style="offset-path: path('M40 120 C 180 20, 300 20, 340 100 S 520 190, 660 100 S 860 20, 960 110'); offset-rotate: 0deg;">
+          <circle r="15" fill="#e4572e"/>
+          <path d="M-6 0 l4 5 9 -10" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+</body>
+</html>

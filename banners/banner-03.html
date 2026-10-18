@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A R Investigation Service – Hero v3</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", Arial, sans-serif; background: #f3f7fb; }
+
+  .hero {
+    position: relative; width: 100%;
+    aspect-ratio: 12 / 5; min-height: 400px; overflow: hidden;
+    display: grid; grid-template-columns: 1.1fr 1fr; align-items: center;
+    gap: 4%; padding: 0 7%;
+    background:
+      radial-gradient(circle at 92% 12%, rgba(20,138,126,.14), transparent 40%),
+      radial-gradient(circle at 5% 100%, rgba(15,52,96,.10), transparent 45%),
+      #f3f7fb;
+    color: #0f2b46;
+  }
+  .hero::after {  /* subtle diagonal band */
+    content: ""; position: absolute; right: -8%; top: -30%; width: 46%; height: 160%;
+    background: linear-gradient(180deg, rgba(15,52,96,.06), rgba(20,138,126,.08));
+    transform: rotate(14deg);
+  }
+
+  .left { position: relative; z-index: 2; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: clamp(11px, 1.05vw, 14px); font-weight: 700;
+    letter-spacing: .16em; text-transform: uppercase; color: #148a7e;
+    margin-bottom: 16px;
+  }
+  .eyebrow::before { content: ""; width: 30px; height: 3px; background: #148a7e; border-radius: 2px; }
+  h1 { font-size: clamp(28px, 3.9vw, 56px); line-height: 1.12; font-weight: 800; letter-spacing: -.015em; }
+  h1 span { color: #148a7e; }
+  .lead { margin-top: 16px; font-size: clamp(14px, 1.45vw, 19px); line-height: 1.65; color: #4a6076; max-width: 540px; }
+
+  .steps { display: flex; gap: 22px; margin-top: 28px; flex-wrap: wrap; }
+  .step { display: flex; align-items: center; gap: 10px; font-size: clamp(12px, 1.2vw, 16px); font-weight: 600; }
+  .step .n {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: #0f3460; color: #fff; font-size: 14px;
+    display: grid; place-items: center;
+  }
+  .step + .step::before { content: ""; width: 26px; height: 2px; background: #b8c8d8; margin-right: 12px; }
+
+  /* report card */
+  .right { position: relative; z-index: 2; display: flex; justify-content: center; }
+  .card {
+    width: min(100%, 440px); background: #fff; border-radius: 16px;
+    box-shadow: 0 24px 60px rgba(15,52,96,.18), 0 2px 6px rgba(15,52,96,.08);
+    padding: 24px 26px; transform: rotate(-1.5deg);
+  }
+  .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .card-head h3 { font-size: 15px; letter-spacing: .04em; color: #0f3460; }
+  .badge {
+    font-size: 12px; font-weight: 700; color: #0b6b5f; background: #d9f3ee;
+    padding: 5px 12px; border-radius: 999px;
+  }
+  .row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 13px 0; border-top: 1px solid #e6edf4; font-size: 15px;
+  }
+  .row .ic {
+    width: 34px; height: 34px; border-radius: 9px; background: #e8f0f8;
+    display: grid; place-items: center; flex: none;
+  }
+  .row .ic svg { width: 19px; height: 19px; stroke: #0f3460; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .row .tx { flex: 1; font-weight: 600; }
+  .row .tx small { display: block; font-weight: 400; color: #7b8fa3; font-size: 12.5px; margin-top: 2px; }
+  .tick {
+    width: 24px; height: 24px; border-radius: 50%; background: #148a7e; flex: none;
+    display: grid; place-items: center;
+  }
+  .tick svg { width: 13px; height: 13px; stroke: #fff; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .card-foot { margin-top: 6px; padding-top: 14px; border-top: 1px dashed #cdd9e5; font-size: 12.5px; color: #7b8fa3; display: flex; justify-content: space-between; }
+
+  @media (max-width: 800px) {
+    .hero { grid-template-columns: 1fr; aspect-ratio: auto; padding: 44px 7%; gap: 30px; }
+    .card { transform: none; }
+    .hero::after { display: none; }
+  }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="left">
+      <div class="eyebrow">A R Investigation Service</div>
+      <h1>Verified on the ground.<br><span>Reported with clarity.</span></h1>
+      <p class="lead">Our field team visits the address, checks the facts in person and sends you a clear, well-documented report.</p>
+      <div class="steps">
+        <div class="step"><span class="n">1</span>Visit</div>
+        <div class="step"><span class="n">2</span>Verify</div>
+        <div class="step"><span class="n">3</span>Report</div>
+      </div>
+    </div>
+
+    <div class="right" aria-hidden="true">
+      <div class="card">
+        <div class="card-head"><h3>VERIFICATION REPORT</h3><span class="badge">Completed</span></div>
+        <div class="row">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg></div>
+          <div class="tx">Residence<small>Address &amp; occupant confirmed</small></div>
+          <div class="tick"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div>
+        </div>
+        <div class="row">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 9h16l-1-5H5z"/><path d="M5 9v11h14V9"/><path d="M10 20v-6h4v6"/></svg></div>
+          <div class="tx">Business<small>Premises &amp; activity checked</small></div>
+          <div class="tick"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div>
+        </div>
+        <div class="row">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+          <div class="tx">Location<small>Visit recorded on site</small></div>
+          <div class="tick"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div>
+        </div>
+        <div class="card-foot"><span>Photo &amp; remarks attached</span><span>Delivered on time</span></div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

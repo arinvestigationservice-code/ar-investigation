@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A R Investigation Service – Hero v4</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", Arial, sans-serif; background: #12163a; }
+
+  .hero {
+    position: relative; width: 100%;
+    aspect-ratio: 12 / 5; min-height: 420px; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    text-align: center; color: #fff; padding-top: 5.5%;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,138,76,.28), transparent 55%),
+      linear-gradient(180deg, #1a1f55 0%, #12163a 100%);
+  }
+  .eyebrow {
+    font-size: clamp(11px, 1.05vw, 14px); font-weight: 700; letter-spacing: .24em;
+    text-transform: uppercase; color: #ff9a62; margin-bottom: 14px;
+  }
+  h1 {
+    font-size: clamp(28px, 4.4vw, 64px); line-height: 1.1; font-weight: 800;
+    letter-spacing: -.015em; max-width: 980px; padding: 0 5%;
+  }
+  h1 span { background: linear-gradient(90deg, #ff9a62, #ffcf6e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead {
+    margin-top: 14px; font-size: clamp(14px, 1.45vw, 19px); line-height: 1.6;
+    color: #c4c9ee; max-width: 640px; padding: 0 5%;
+  }
+  .tiles { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; justify-content: center; padding: 0 5%; position: relative; z-index: 3; }
+  .tile {
+    display: flex; align-items: center; gap: 9px;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18);
+    padding: 9px 16px; border-radius: 999px; font-size: clamp(12px, 1.15vw, 15px); font-weight: 600;
+  }
+  .tile svg { width: 17px; height: 17px; stroke: #ffb27f; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* skyline strip */
+  .city { position: absolute; left: 0; right: 0; bottom: 0; height: 36%; z-index: 1; }
+  .city svg { width: 100%; height: 100%; display: block; }
+
+  @media (max-width: 700px) {
+    .hero { aspect-ratio: auto; min-height: 520px; padding: 48px 0 150px; }
+    .city { height: 130px; }
+  }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="eyebrow">A R Investigation Service</div>
+    <h1>Every address. Every location. <span>Checked in person.</span></h1>
+    <p class="lead">Reliable field verification from a trained on-ground team, with clear reports you can depend on.</p>
+    <div class="tiles">
+      <div class="tile"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Residence</div>
+      <div class="tile"><svg viewBox="0 0 24 24"><path d="M4 9h16l-1-5H5z"/><path d="M5 9v11h14V9"/><path d="M10 20v-6h4v6"/></svg>Business</div>
+      <div class="tile"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Address</div>
+    </div>
+
+    <div class="city" aria-hidden="true">
+      <svg viewBox="0 0 1200 220" preserveAspectRatio="xMidYMax slice">
+        <!-- back layer -->
+        <g fill="#1d2466">
+          <rect x="20" y="110" width="70" height="110"/><rect x="100" y="80" width="60" height="140"/>
+          <rect x="170" y="120" width="90" height="100"/><rect x="290" y="90" width="70" height="130"/>
+          <rect x="420" y="115" width="80" height="105"/><rect x="520" y="70" width="64" height="150"/>
+          <rect x="610" y="105" width="90" height="115"/><rect x="730" y="85" width="70" height="135"/>
+          <rect x="830" y="120" width="86" height="100"/><rect x="940" y="75" width="64" height="145"/>
+          <rect x="1030" y="110" width="80" height="110"/><rect x="1120" y="90" width="70" height="130"/>
+        </g>
+        <!-- front layer -->
+        <g fill="#0c0f2b">
+          <rect x="0" y="150" width="110" height="70"/>
+          <polygon points="130,150 190,115 250,150 250,220 130,220"/>
+          <rect x="280" y="135" width="120" height="85"/><rect x="280" y="125" width="120" height="14" fill="#ff7a3d"/>
+          <rect x="430" y="145" width="90" height="75"/>
+          <polygon points="550,160 610,122 670,160 670,220 550,220"/>
+          <rect x="700" y="130" width="130" height="90"/><rect x="700" y="120" width="130" height="14" fill="#ff7a3d"/>
+          <rect x="860" y="150" width="100" height="70"/>
+          <polygon points="985,155 1045,118 1105,155 1105,220 985,220"/>
+          <rect x="1130" y="140" width="70" height="80"/>
+        </g>
+        <!-- lit windows -->
+        <g fill="#ffcf6e" opacity=".85">
+          <rect x="305" y="155" width="14" height="16"/><rect x="335" y="155" width="14" height="16"/><rect x="365" y="155" width="14" height="16"/>
+          <rect x="725" y="150" width="14" height="16"/><rect x="755" y="150" width="14" height="16"/><rect x="785" y="150" width="14" height="16"/>
+          <rect x="165" y="170" width="14" height="16"/><rect x="585" y="178" width="14" height="16"/><rect x="1020" y="172" width="14" height="16"/>
+        </g>
+        <!-- location pins with tick -->
+        <g>
+          <g transform="translate(220 78)">
+            <path d="M0 40 C-22 18 -24 6 -24 -2 A24 24 0 0 1 24 -2 C24 6 22 18 0 40Z" fill="#ff7a3d"/>
+            <circle cx="0" cy="-2" r="14" fill="#fff"/><path d="M-6 -2 l4 5 8 -9" fill="none" stroke="#12a38f" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <g transform="translate(640 66)">
+            <path d="M0 40 C-22 18 -24 6 -24 -2 A24 24 0 0 1 24 -2 C24 6 22 18 0 40Z" fill="#ffb347"/>
+            <circle cx="0" cy="-2" r="14" fill="#fff"/><path d="M-6 -2 l4 5 8 -9" fill="none" stroke="#12a38f" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <g transform="translate(1045 62)">
+            <path d="M0 40 C-22 18 -24 6 -24 -2 A24 24 0 0 1 24 -2 C24 6 22 18 0 40Z" fill="#ff7a3d"/>
+            <circle cx="0" cy="-2" r="14" fill="#fff"/><path d="M-6 -2 l4 5 8 -9" fill="none" stroke="#12a38f" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </g>
+        <!-- road -->
+        <rect x="0" y="205" width="1200" height="15" fill="#07091d"/>
+        <line x1="0" y1="212" x2="1200" y2="212" stroke="#ffcf6e" stroke-width="2" stroke-dasharray="22 18" opacity=".6"/>
+      </svg>
+    </div>
+  </section>
+</body>
+</html>

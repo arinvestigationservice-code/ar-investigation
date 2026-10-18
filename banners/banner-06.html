@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A R Investigation Service – Hero v9</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", Arial, sans-serif; background: #eefaf6; }
+
+  .hero {
+    position: relative; width: 100%;
+    aspect-ratio: 12 / 5; min-height: 420px; overflow: hidden;
+    display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+    padding: 0 6%;
+    background: linear-gradient(135deg, #f4fffb 0%, #dff5ee 60%, #c9ece2 100%);
+    color: #0c3b36;
+  }
+
+  .left { position: relative; z-index: 2; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 9px;
+    background: #fff; border: 1px solid #bfe3d9; border-radius: 999px;
+    padding: 7px 15px 7px 11px; font-size: clamp(11px, 1vw, 14px); font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; color: #0f766e; margin-bottom: 18px;
+  }
+  .badge i { width: 10px; height: 10px; border-radius: 50%; background: #14b8a6; box-shadow: 0 0 0 4px rgba(20,184,166,.25); animation: blink 1.6s infinite; }
+  @keyframes blink { 50% { opacity: .35; } }
+  h1 { font-size: clamp(30px, 4.3vw, 62px); line-height: 1.08; font-weight: 800; letter-spacing: -.02em; }
+  h1 span { color: #0f9b8e; }
+  .lead { margin-top: 16px; font-size: clamp(14px, 1.45vw, 19px); line-height: 1.65; color: #3d6660; max-width: 520px; }
+  .row { display: flex; gap: 26px; margin-top: 26px; flex-wrap: wrap; }
+  .row div { font-size: clamp(12px, 1.2vw, 16px); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .row svg { width: 20px; height: 20px; stroke: #0f9b8e; fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* radar */
+  .right { position: relative; z-index: 2; display: grid; place-items: center; }
+  .radar { position: relative; width: min(92%, 470px); aspect-ratio: 1; }
+  .radar .ring { position: absolute; border-radius: 50%; border: 1.5px solid rgba(15,155,142,.35); inset: 0; }
+  .radar .r2 { inset: 16%; } .radar .r3 { inset: 32%; } .radar .r4 { inset: 46%; background: rgba(15,155,142,.12); }
+  .radar .cross-h, .radar .cross-v { position: absolute; background: rgba(15,155,142,.25); }
+  .radar .cross-h { left: 0; right: 0; top: 50%; height: 1.5px; }
+  .radar .cross-v { top: 0; bottom: 0; left: 50%; width: 1.5px; }
+  .sweep {
+    position: absolute; inset: 0; border-radius: 50%;
+    background: conic-gradient(from 0deg, rgba(20,184,166,0) 0deg, rgba(20,184,166,0) 280deg, rgba(20,184,166,.45) 360deg);
+    animation: spin 5s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .dot { position: absolute; width: 16px; height: 16px; border-radius: 50%; background: #0f9b8e; transform: translate(-50%,-50%); box-shadow: 0 0 0 6px rgba(15,155,142,.2); }
+  .dot::after {
+    content: ""; position: absolute; left: 4px; top: 3px; width: 5px; height: 8px;
+    border: solid #fff; border-width: 0 2.2px 2.2px 0; transform: rotate(40deg);
+  }
+  .center { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 62px; height: 62px; border-radius: 50%; background: #0c3b36; display: grid; place-items: center; box-shadow: 0 8px 20px rgba(12,59,54,.35); }
+  .center svg { width: 30px; height: 30px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  @media (max-width: 800px) {
+    .hero { grid-template-columns: 1fr; aspect-ratio: auto; padding: 44px 6%; gap: 26px; }
+    .radar { width: min(80%, 340px); }
+  }
+  @media (prefers-reduced-motion: reduce) { .sweep, .badge i { animation: none; } }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="left">
+      <div class="badge"><i></i>A R Investigation Service</div>
+      <h1>Wherever the address is,<br><span>we reach it.</span></h1>
+      <p class="lead">Field verification handled by a team that visits in person, confirms the facts and reports back without delay.</p>
+      <div class="row">
+        <div><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Residence</div>
+        <div><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Business</div>
+        <div><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Address</div>
+      </div>
+    </div>
+
+    <div class="right" aria-hidden="true">
+      <div class="radar">
+        <div class="ring"></div><div class="ring r2"></div><div class="ring r3"></div><div class="ring r4"></div>
+        <div class="cross-h"></div><div class="cross-v"></div>
+        <div class="sweep"></div>
+        <div class="dot" style="left:24%;top:30%"></div>
+        <div class="dot" style="left:72%;top:22%"></div>
+        <div class="dot" style="left:82%;top:60%"></div>
+        <div class="dot" style="left:56%;top:84%"></div>
+        <div class="dot" style="left:20%;top:68%"></div>
+        <div class="center"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

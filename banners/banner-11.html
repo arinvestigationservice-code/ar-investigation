@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A R Investigation Service – Hero v16</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", Arial, sans-serif; background: #f1efe9; }
+
+  .hero {
+    position: relative; width: 100%;
+    aspect-ratio: 12 / 5; min-height: 440px; overflow: hidden;
+    background: #f1efe9; color: #1b2430;
+    display: grid; grid-template-columns: 1fr 1.05fr; align-items: center; padding: 0 7%;
+  }
+  .left { position: relative; z-index: 2; }
+  .eyebrow { font-size: clamp(11px, 1vw, 14px); font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: #6a4cff; margin-bottom: 14px; }
+  h1 { font-size: clamp(30px, 4.4vw, 64px); line-height: 1.06; font-weight: 800; letter-spacing: -.025em; }
+  h1 span { color: #6a4cff; }
+  .lead { margin-top: 16px; font-size: clamp(14px, 1.45vw, 19px); line-height: 1.65; color: #55606e; max-width: 500px; }
+  .tags { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+  .tags span { background: #1b2430; color: #fff; border-radius: 8px; padding: 8px 15px; font-size: clamp(11px, 1.05vw, 14px); font-weight: 700; }
+
+  /* blurred document with a sharp lens */
+  .right { position: relative; z-index: 2; display: flex; justify-content: center; }
+  .doc {
+    position: relative; width: min(100%, 520px); aspect-ratio: 4 / 3; background: #fff; border-radius: 16px;
+    box-shadow: 0 24px 60px rgba(27,36,48,.18); padding: 26px 28px; overflow: hidden;
+  }
+  .doc .blur { filter: blur(5px); opacity: .75; }
+  .doc .hd { font-weight: 800; font-size: 15px; letter-spacing: .08em; margin-bottom: 18px; }
+  .doc .r { display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 16px; font-weight: 600; }
+  .doc .r span:last-child { color: #7b8794; font-weight: 500; }
+  .doc .bar { height: 10px; border-radius: 5px; background: #e8e6df; margin-bottom: 10px; }
+  .doc .bar.s { width: 60%; }
+
+  /* lens: crisp copy of key info */
+  .lens {
+    position: absolute; left: 30%; top: 22%; width: 52%; aspect-ratio: 1; border-radius: 50%;
+    background: #fff; border: 10px solid #6a4cff; box-shadow: 0 16px 40px rgba(106,76,255,.35), inset 0 0 30px rgba(106,76,255,.12);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8%;
+    animation: float 5s ease-in-out infinite;
+  }
+  .lens::after {
+    content: ""; position: absolute; right: -34%; bottom: -26%; width: 34%; height: 14px; background: #6a4cff; border-radius: 8px;
+    transform: rotate(45deg); transform-origin: left center; left: 86%; top: 88%;
+  }
+  .lens .big { width: 60px; height: 60px; border-radius: 50%; background: #17b26a; display: grid; place-items: center; margin-bottom: 10px; }
+  .lens .big svg { width: 30px; height: 30px; stroke: #fff; fill: none; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+  .lens b { font-size: clamp(14px, 1.5vw, 20px); font-weight: 800; }
+  .lens small { font-size: clamp(11px, 1vw, 13px); color: #55606e; margin-top: 3px; }
+  @keyframes float { 50% { transform: translate(8px, -8px); } }
+
+  @media (max-width: 800px) {
+    .hero { grid-template-columns: 1fr; aspect-ratio: auto; padding: 44px 7%; gap: 34px; }
+    .doc { aspect-ratio: 1 / 1; }
+    .lens { left: 22%; top: 20%; width: 60%; }
+  }
+  @media (prefers-reduced-motion: reduce) { .lens { animation: none; } }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="left">
+      <div class="eyebrow">A R Investigation Service</div>
+      <h1>Don't assume.<br><span>Look closer.</span></h1>
+      <p class="lead">We go beyond paperwork. Our field team confirms the details in person so you get clarity, not guesswork.</p>
+      <div class="tags"><span>Residence</span><span>Business</span><span>Address</span></div>
+    </div>
+
+    <div class="right" aria-hidden="true">
+      <div class="doc">
+        <div class="blur">
+          <div class="hd">ADDRESS DETAILS</div>
+          <div class="r"><span>Location</span><span>Not confirmed</span></div>
+          <div class="r"><span>Occupant</span><span>Not confirmed</span></div>
+          <div class="r"><span>Premises</span><span>Not confirmed</span></div>
+          <div class="bar"></div><div class="bar s"></div>
+        </div>
+        <div class="lens">
+          <div class="big"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div>
+          <b>Confirmed on site</b>
+          <small>Verified in person</small>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
