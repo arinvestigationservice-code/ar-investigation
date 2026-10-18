@@ -8,6 +8,23 @@ const CONFIG = {
   phone: "",
   formEndpoint: "",
   registration: "",
+  // Banners: images ko "banners" folder me rakho aur yaha naam likho. link/alt optional hai.
+  // Image banner:  { img: "banners/offer1.jpg", alt: "Offer", link: "contact.html" }
+  // HTML banner:   { html: "banners/offer2.html", title: "Offer" }
+  banners: [
+    { html: "banners/banner-01.html", title: "Every address, every location, verified" },
+    { html: "banners/banner-02.html", title: "Field verification, wherever you need it" },
+    { html: "banners/banner-03.html", title: "Verified on the ground, reported with clarity" },
+    { html: "banners/banner-04.html", title: "Every address checked in person" },
+    { html: "banners/banner-05.html", title: "We check it on site, you decide" },
+    { html: "banners/banner-06.html", title: "Wherever the address is, we reach it" },
+    { html: "banners/banner-07.html", title: "Know who is at your door" },
+    { html: "banners/banner-08.html", title: "A report you can stand behind" },
+    { html: "banners/banner-09.html", title: "Your request goes in, our executive goes out" },
+    { html: "banners/banner-10.html", title: "We come to you, right to the door" },
+    { html: "banners/banner-11.html", title: "Don't assume, look closer" }
+  ],
+  bannerSeconds: 6,
   // Document Vault ka Supabase (publishable key public hoti hai, safe hai)
   supabaseUrl: "https://tbqgmynknagpvuoqzbkw.supabase.co",
   supabaseKey: "sb_publishable_XpiGkGktxzTPBSsOXP5w4g_7zTzyZqV"
@@ -273,3 +290,79 @@ if (vForm) {
     vForm.vcaptcha.focus({ preventScroll: true });
   }
 }
+
+/* ===== Banner slider (home page): one banner at a time, automatic ===== */
+(function () {
+  const box = document.getElementById("banners");
+  const list = (CONFIG.banners || []).filter((b) => b && (b.img || b.html));
+  if (!box || !list.length) return;
+  const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ms = Math.max(2, +CONFIG.bannerSeconds || 6) * 1000;
+  const esc = (v) => String(v).replace(/"/g, "&quot;");
+  box.innerHTML =
+    '<div class="bn__view"><div class="bn__track">' +
+    list.map((b, i) => {
+      const t = esc(b.alt || b.title || "Banner " + (i + 1));
+      let body;
+      if (b.html) {
+        body = '<iframe data-src="' + esc(b.html) + '" title="' + t + '" scrolling="no" tabindex="-1"></iframe>' +
+          (b.link ? '<a class="bn__cover" href="' + esc(b.link) + '" aria-label="' + t + '"></a>' : "");
+      } else {
+        const img = '<img src="' + esc(b.img) + '" alt="' + t + '"' + (i ? ' loading="lazy"' : "") + ">";
+        body = b.link ? '<a href="' + esc(b.link) + '">' + img + "</a>" : img;
+      }
+      return '<div class="bn__slide" role="group" aria-roledescription="slide" aria-label="' + (i + 1) + " of " + list.length + '">' + body + "</div>";
+    }).join("") + "</div>" +
+    (list.length > 1 ? '<button class="bn__nav bn__prev" type="button" aria-label="Previous banner">&#8249;</button><button class="bn__nav bn__next" type="button" aria-label="Next banner">&#8250;</button><div class="bn__dots">' +
+      list.map((_, i) => '<button type="button" aria-label="Show banner ' + (i + 1) + '"></button>').join("") + "</div>" : "") + "</div>";
+  box.hidden = false;
+  const view = box.querySelector(".bn__view"), track = box.querySelector(".bn__track");
+  const slides = [...box.querySelectorAll(".bn__slide")], dots = [...box.querySelectorAll(".bn__dots button")];
+  const heights = [];
+  let cur = 0, timer = null, held = false;
+
+  /* each banner decides its own height; the frame follows it */
+  const measure = (i) => {
+    const fr = slides[i].querySelector("iframe");
+    if (!fr) return;
+    try {
+      const d = fr.contentDocument;
+      const h = Math.ceil(Math.max(d.body.offsetHeight, d.body.firstElementChild ? d.body.firstElementChild.offsetHeight : 0));
+      if (h > 80) heights[i] = h;
+    } catch (e) { /* different origin: keep the default ratio */ }
+    if (i === cur) fit();
+  };
+  const fit = () => { if (heights[cur]) view.style.height = heights[cur] + "px"; };
+  const load = (i) => {
+    i = (i + list.length) % list.length;
+    const fr = slides[i].querySelector("iframe");
+    if (!fr || fr.getAttribute("src")) return;
+    fr.addEventListener("load", () => { measure(i); setTimeout(() => measure(i), 400); });
+    fr.setAttribute("src", fr.dataset.src);
+  };
+  const show = (n) => {
+    cur = (n + list.length) % list.length;
+    track.style.transform = "translateX(" + -cur * 100 + "%)";
+    dots.forEach((d, i) => d.setAttribute("aria-current", i === cur ? "true" : "false"));
+    slides.forEach((s, i) => s.setAttribute("aria-hidden", i === cur ? "false" : "true"));
+    load(cur); load(cur + 1); load(cur - 1);
+    measure(cur); fit();
+  };
+  let rt = null;
+  window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => list.forEach((_, i) => measure(i)), 150); });
+  if (list.length < 2) { show(0); return; }
+  const stop = () => { clearInterval(timer); timer = null; };
+  const play = () => { stop(); if (!reduce && !held && !document.hidden) timer = setInterval(() => show(cur + 1), ms); };
+  box.querySelector(".bn__prev").onclick = () => { show(cur - 1); play(); };
+  box.querySelector(".bn__next").onclick = () => { show(cur + 1); play(); };
+  dots.forEach((d, i) => (d.onclick = () => { show(i); play(); }));
+  box.addEventListener("mouseenter", () => { held = true; stop(); });
+  box.addEventListener("mouseleave", () => { held = false; play(); });
+  box.addEventListener("focusin", () => { held = true; stop(); });
+  box.addEventListener("focusout", () => { held = false; play(); });
+  document.addEventListener("visibilitychange", play);
+  let x0 = null;
+  box.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+  box.addEventListener("touchend", (e) => { if (x0 === null) return; const d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 40) { show(cur + (d < 0 ? 1 : -1)); play(); } x0 = null; });
+  show(0); play();
+})();
