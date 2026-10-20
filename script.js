@@ -11,6 +11,8 @@ const CONFIG = {
   // Banners: images ko "banners" folder me rakho aur yaha naam likho. link/alt optional hai.
   // Image banner:  { img: "banners/offer1.jpg", alt: "Offer", link: "contact.html" }
   // HTML banner:   { html: "banners/offer2.html", title: "Offer" }
+  // Social media: poora link ya sirf @handle likho. Khali ("") rakhoge to icon nahi dikhega.
+  social: { instagram: "ar.investigation.service", facebook: "", youtube: "", x: "", linkedin: "ar-investigation-service", telegram: "" },
   banners: [
     { html: "banners/banner-01.html", title: "Every address, every location, verified" },
     { html: "banners/banner-02.html", title: "Field verification, wherever you need it" },
@@ -365,4 +367,31 @@ if (vForm) {
   box.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
   box.addEventListener("touchend", (e) => { if (x0 === null) return; const d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 40) { show(cur + (d < 0 ? 1 : -1)); play(); } x0 = null; });
   show(0); play();
+})();
+
+/* ===== Social media icons (footer + contact page) ===== */
+(function () {
+  const S = CONFIG.social || {};
+  const BASE = { instagram: "https://instagram.com/", facebook: "https://facebook.com/", youtube: "https://youtube.com/", x: "https://x.com/", linkedin: "https://linkedin.com/in/", telegram: "https://t.me/" };
+  const NAME = { instagram: "Instagram", facebook: "Facebook", youtube: "YouTube", x: "X (Twitter)", linkedin: "LinkedIn", telegram: "Telegram" };
+  const SVG = {
+    instagram: '<rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>',
+    facebook: '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+    youtube: '<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/>',
+    x: '<path d="M4 4l16 16M20 4L4 20"/>',
+    linkedin: '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>',
+    telegram: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>'
+  };
+  const url = (k, v) => {
+    v = String(v || "").trim();
+    if (!v) return "";
+    if (/^https?:\/\//i.test(v)) return v;
+    return BASE[k] + v.replace(/^@/, "").replace(/^\/+/, "");
+  };
+  const html = Object.keys(NAME).map((k) => {
+    const u = url(k, S[k]);
+    return u ? '<a href="' + u.replace(/"/g, "&quot;") + '" target="_blank" rel="noopener noreferrer" aria-label="' + NAME[k] + '" title="' + NAME[k] + '"><svg viewBox="0 0 24 24" aria-hidden="true">' + SVG[k] + "</svg></a>" : "";
+  }).join("");
+  if (!html) return;
+  $$("[data-social]").forEach((el) => { el.innerHTML = html; el.hidden = false; });
 })();
