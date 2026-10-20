@@ -298,3 +298,13 @@ textarea.input{resize:vertical;min-height:120px}
 .bn__view :focus-visible{outline:3px solid #fff;outline-offset:-3px}
 @media(max-width:700px){.banners{padding-top:12px}.bn__view{border-radius:0;aspect-ratio:auto;height:560px}.bn__nav{width:34px;height:34px;font-size:22px;top:auto;bottom:8px;transform:none}.bn__prev{left:10px}.bn__next{right:10px}}
 @media(prefers-reduced-motion:reduce){.bn__track,.bn__view{transition:none}}
+
+/* ===== Social icons ===== */
+.social{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.social[hidden]{display:none}
+.social a{width:38px;height:38px;border-radius:8px;border:1px solid rgba(255,255,255,.28);display:grid;place-items:center;color:#DCE6F1;text-decoration:none}
+.social a:hover{background:#fff;color:var(--ink);text-decoration:none}
+.social svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.social--lg{margin:20px 0 4px}
+.social--lg a{border-color:var(--line);color:var(--ink);background:#fff}
+.social--lg a:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
