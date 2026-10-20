@@ -12,7 +12,9 @@ const CONFIG = {
   // Image banner:  { img: "banners/offer1.jpg", alt: "Offer", link: "contact.html" }
   // HTML banner:   { html: "banners/offer2.html", title: "Offer" }
   // Social media: poora link ya sirf @handle likho. Khali ("") rakhoge to icon nahi dikhega.
-  social: { instagram: "", facebook: "", youtube: "", x: "", linkedin: "", telegram: "" },
+  social: { instagram: "https://www.instagram.com/ar.investigation.service/", facebook: "", youtube: "", x: "", linkedin: "www.linkedin.com/in/a-r-investigation-ab15a6445
+
+", telegram: "" },
   banners: [
     { html: "banners/banner-01.html", title: "Every address, every location, verified" },
     { html: "banners/banner-02.html", title: "Field verification, wherever you need it" },
